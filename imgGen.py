@@ -12,11 +12,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, array_to_im
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import utils as np_utils
 
-def imgGenFunc(image_size, flip, rotate):
+def imgGenFunc(image_size, flip, rotate, csv_dir, img_dir):
     # generated image
-    train_str = "train.csv"
-    train_img_dir = "C1-P1_Train/" 
-    csvfile = open(train_str)
+#     csv_dir = "train.csv"
+#     img_dir = "C1-P1_Train/" 
+    csvfile = open(csv_dir)
     reader = csv.reader(csvfile)
     labels_pic = []
     labels_level = []
@@ -38,21 +38,15 @@ def imgGenFunc(image_size, flip, rotate):
         labels_level[i] = labels_level[i].replace("B","1")
         labels_level[i] = labels_level[i].replace("C","2")
 
-    # 隨機讀取圖片
-    a = 0
-    items= []
-    for a in range(0, picnum):
-        items.append(a)
     c = 1
     # 製作訓練用資料集及標籤
-    for i in random.sample(items, picnum):
+    for i in range(0, picnum):
         
         print(c, end="\r", flush=True)
         c += 1
         
-        img = cv2.imread(train_img_dir + labels_pic[i] + ".jpg")
+        img = cv2.imread(img_dir + labels_pic[i] + ".jpg")
         res = cv2.resize(img,(image_size,image_size),interpolation=cv2.INTER_LINEAR)
-        res = cv2.cvtColor(res,cv2.COLOR_BGR2RGB)
 
         # flip image
         if (flip is 1):
@@ -86,6 +80,11 @@ def imgGenFunc(image_size, flip, rotate):
     # 轉換至array的格式
     X = np.array(X)
     y = np.array(y)# 轉換至float的格式
+    
+    # shuffle the data
+    from sklearn.utils import shuffle
+    X, y = shuffle(X, y, random_state=0)
+    
     for i in range(len(X)):
         X[i] = X[i].astype('float32')# 將標籤轉換至float格式
     y = np_utils.to_categorical(y, num_classes = 3)
