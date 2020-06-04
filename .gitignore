@@ -5,6 +5,9 @@
 /C1-P1_Train_A/*
 /C1-P1_Train_B/*
 /C1-P1_Train_C/*
+/test3-2/*
+*.png
+*.jpg
 dev.csv
 train.csv
 
