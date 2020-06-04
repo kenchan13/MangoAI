@@ -1,6 +1,7 @@
 /C1-P1_Dev/*
 /C1-P1_Train/*
 /h5/*
+/blur_Train/*
 dev.csv
 train.csv
 
